@@ -1,37 +1,88 @@
-fish_encounters
-fish_encounters %>%
-  pivot_wider(names_from = station, values_from = seen)
 
-relig_income
+loadd(lockdown_data, state_level_data)
 
-relig_income %>%
-  pivot_longer(-religion, names_to = "income", values_to = "count")
+plot_mobility_changes(state_level_data, lockdown_data)
 
+ggplot(mtcars, aes(mpg, cyl)) +
+  geom_point() +
+  geom_ribbon(aes(xmin = 15, xmax = Inf), alpha = 0.1, color = "black", linetype = "dashed")
 
+l <- list(a = 1, b = 2)
+x <- imap(l, function(x, i) print(x))
+names(l)
+names(x)
+
+source("code/packages.R")
 loadd(state_level_data)
+data <- state_level_data %>%
+  filter(region == "NJ")
+data
 
-al_data <- state_level_data %>%
-  filter(region == "AL")
-al_data
+change_from_baseline_cols <- colnames(state_level_data)[-c(1:2, 9:12)]
 
-change_from_baseline_cols <- colnames(state_level_data)[-c(1, 2, 9, 10)]
+data <- data %>%
+  pivot_longer(
+    cols = all_of(change_from_baseline_cols),
+    names_to = "type",
+    values_to = "change"
+  )
 
-tmp <- syms(change_from_baseline_cols)
+lockdown <- data$lockdown[[1]]
+reopen <- data$reopen[[1]]
 
-al_data_longer <- al_data %>%
-  pivot_longer(all_of(change_from_baseline_cols), names_to = "type", values_to = "change")
+plot <- ggplot(data, aes(date, change, color = type)) +
+  geom_line() +
+  geom_hline(yintercept = 0, linetype = "dashed")
 
-al_data_longer
+if (lockdown > -Inf) {
+  # plot <- plot +
+  #   geom_rect(aes(xmin = as_date(lockdown), xmax = as_date(reopen),
+  #                 ymin = -Inf, ymax = Inf),
+  #             alpha = 0.5, fill = "grey")
+  
+  plot <- plot +
+    annotate("rect", xmin = as_date(lockdown), xmax = as_date(reopen),
+             ymin = -Inf, ymax = Inf,
+             alpha = 0.5, fill = "grey")
+}
+
+print(plot)
+
+
+
+
+
+mtcars$cyl <- factor(mtcars$cyl)
+mtcars$am <- factor(mtcars$am)
+
+ggplot(mtcars) +
+  geom_density(aes(x=disp, group=cyl, fill=cyl), alpha=0.6, adjust=0.75) + 
+  geom_rect(data=data.frame(xmin=100, xmax=200, ymin=0, ymax=Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin,ymax=ymax), fill="red", alpha=0.2) 
+
+ggplot(mtcars) +
+  geom_density(aes(x=disp, group=cyl, fill=cyl), alpha=0.6, adjust=0.75) + 
+  geom_rect(aes(xmin=100, xmax=200, ymin=0,ymax=Inf), fill="red", alpha=0.2) 
+
+
+
+
+
+
+
+
+
 
 
 library(cowplot)
 
-
 loadd(mobility_plots)
 mobility_plots[["NJ"]]
 
+mobility_plots[["TX"]]
 
 plot_grid(mobility_plots[["NJ"]], mobility_plots[["NY"]])
+
+mobility_plots[["NE"]]
 
 p1 <- mobility_plots[["NJ"]]
 p2 <- mobility_plots[["NY"]]

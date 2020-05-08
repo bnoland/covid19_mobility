@@ -74,8 +74,8 @@ make_state_level_data <- function(us_data, pop_density_data, lockdown_data) {
     left_join(pop_density_data, by = "region") %>%
     left_join(lockdown_data, by = "region") %>%
     # TODO: Ensure this works properly.
-    mutate(on_lockdown = (date >= lockdown) & (date < reopen)) %>%
-    select(-lockdown, -reopen)
+    mutate(on_lockdown = (date >= lockdown) & (date < reopen))
+    #select(-lockdown, -reopen)
   
   state_level_data
 }
@@ -131,11 +131,11 @@ plot_mobility_changes <- function(state_level_data, lockdown_data) {
     group_split() %>%
     set_names(regions)
   
-  change_from_baseline_cols <- colnames(state_level_data)[-c(1, 2, 9, 10)]
+  change_from_baseline_cols <- colnames(state_level_data)[-c(1:2, 9:12)]
   
-  # Note that purrr::map() preserves the names of its input list.
+  # Note that purrr::imap() preserves the names of its input list.
   plots <- state_data_list %>%
-    map(function(data) {
+    imap(function(data, region) {
       data <- data %>%
         pivot_longer(
           cols = all_of(change_from_baseline_cols),
@@ -143,8 +143,19 @@ plot_mobility_changes <- function(state_level_data, lockdown_data) {
           values_to = "change"
         )
       
-      # TODO: Add lines showing lockdown start and end.
-      plot <- ggplot(data, aes(date, change, color = type)) +
+      plot <- ggplot(data, aes(date, change, color = type))
+      
+      lockdown <- data$lockdown[[1]]
+      reopen <- data$reopen[[1]]
+      
+      if (lockdown > -Inf) {
+        plot <- plot +
+          annotate("rect", xmin = as_date(lockdown), xmax = as_date(reopen),
+                   ymin = -Inf, ymax = Inf,
+                   alpha = 0.5, fill = "grey")
+      }
+      
+      plot <- plot +
         geom_line() +
         geom_hline(yintercept = 0, linetype = "dashed")
       
