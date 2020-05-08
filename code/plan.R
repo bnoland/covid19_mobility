@@ -11,9 +11,9 @@ plan <- drake_plan(
   lockdown_data = load_lockdown_data(file_in("data/lockdown.csv")),
   state_level_data = make_state_level_data(us_data, pop_density_data,
                                            lockdown_data),
-  rt_data = load_rt_data(file_in("data/rt.csv"))
+  rt_data = load_rt_data(file_in("data/rt.csv")),
 
 # Plots -------------------------------------------------------------------
 
-  #mobility_plots = plot_mobility_changes(state_level_data, lockdown_data)
+  mobility_plots = plot_mobility_changes(state_level_data, lockdown_data)
 )

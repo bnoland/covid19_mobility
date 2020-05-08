@@ -22,7 +22,7 @@ load_raw_us_data <- function(file) {
 
 region_abbr <- c(state.abb, "DC", "US")
 region_name <- c(state.name, "District of Columbia", "United States")
-region_abbr_lookup <- setNames(region_abbr, region_name)
+region_abbr_lookup <- set_names(region_abbr, region_name)
 
 make_us_data <- function(raw_us_data) {
   us_data <- raw_us_data %>%
@@ -136,8 +136,19 @@ plot_mobility_changes <- function(state_level_data, lockdown_data) {
   # Note that purrr::map() preserves the names of its input list.
   plots <- state_data_list %>%
     map(function(data) {
-      ggplot(data, aes(date, residential)) +
-        geom_point()
+      data <- data %>%
+        pivot_longer(
+          cols = all_of(change_from_baseline_cols),
+          names_to = "type",
+          values_to = "change"
+        )
+      
+      # TODO: Add lines showing lockdown start and end.
+      plot <- ggplot(data, aes(date, change, color = type)) +
+        geom_line() +
+        geom_hline(yintercept = 0, linetype = "dashed")
+      
+      plot
     })
   
   plots
