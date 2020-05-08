@@ -1,0 +1,81 @@
+---
+title: "Exploratory Data Analysis"
+output: html_notebook
+date: 2020-05-07
+---
+
+```{r setup, include=FALSE}
+source("code/packages.R")
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.width = 6,
+  fig.asp = 0.618,
+  out.width = "70%",
+  fig.align = "center",
+  fig.show = "hold",
+  eval = TRUE
+)
+
+loadd(
+  raw_us_data,
+  us_data,
+  state_level_data,
+  rt_data
+)
+```
+
+```{r raw-us-missing-values}
+raw_us_data %>%
+  map(~ sum(is.na(.x)))
+```
+
+# Examining the *unprocessed* Google mobility data for the United States
+
+```{r raw-us-unique-country-codes}
+raw_us_data %>%
+  pull(country_region) %>%
+  unique()
+```
+
+```{r raw-us-data-states}
+raw_us_data %>%
+  pull(sub_region_1) %>%
+  unique()
+```
+
+```{r raw-us-data-sub-region-counts}
+raw_us_data %>%
+  count(sub_region_1, sub_region_2)
+```
+
+```{r raw-us-data-date-ranges}
+raw_us_data %>%
+  group_by(sub_region_1) %>%
+  summarize(
+    min = min(date),
+    max = max(date)
+  )
+```
+
+# Examining the *processed* Google mobility data for the United States
+
+```{r us-data-states}
+us_data %>%
+  pull(sub_region_1) %>%
+  unique()
+```
+
+# Examining the state-level data
+
+```{r state-level-missing-values}
+state_level_data %>%
+  map(~ sum(is.na(.x)))
+```
+
+
+
+```{r session-info}
+sessionInfo()
+```
+

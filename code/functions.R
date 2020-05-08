@@ -1,12 +1,8 @@
 
 # Data loading and preprocessing ------------------------------------------
 
-region_abbr <- c(state.abb, "DC", "US")
-region_name <- c(state.name, "District of Columbia", "United States")
-region_abbr_lookup <- setNames(region_abbr, region_name)
-
-load_us_data <- function(file) {
-  us_data <- read_csv(
+load_raw_us_data <- function(file) {
+  raw_us_data <- read_csv(
     file = file,
     col_types = cols(
       country_region_code = col_character(),
@@ -18,7 +14,18 @@ load_us_data <- function(file) {
     )
   )
   
-  us_data <- us_data %>%
+  raw_us_data <- raw_us_data %>%
+    filter(country_region_code == "US")
+  
+  raw_us_data
+}
+
+region_abbr <- c(state.abb, "DC", "US")
+region_name <- c(state.name, "District of Columbia", "United States")
+region_abbr_lookup <- setNames(region_abbr, region_name)
+
+make_us_data <- function(raw_us_data) {
+  us_data <- raw_us_data %>%
     filter(country_region_code == "US") %>%
     select(-country_region_code, -country_region) %>%
     mutate(
@@ -108,4 +115,30 @@ load_lockdown_data <- function(file) {
   names(lockdown_data$region) <- NULL
   
   lockdown_data
+}
+
+# Plots -------------------------------------------------------------------
+
+plot_mobility_changes <- function(state_level_data, lockdown_data) {
+  state_level_data_grouped <- state_level_data %>%
+    group_by(region)
+  
+  regions <- state_level_data_grouped %>%
+    group_keys() %>%
+    pull(region)
+  
+  state_data_list <- state_level_data_grouped %>%
+    group_split() %>%
+    set_names(regions)
+  
+  change_from_baseline_cols <- colnames(state_level_data)[-c(1, 2, 9, 10)]
+  
+  # Note that purrr::map() preserves the names of its input list.
+  plots <- state_data_list %>%
+    map(function(data) {
+      ggplot(data, aes(date, residential)) +
+        geom_point()
+    })
+  
+  plots
 }
