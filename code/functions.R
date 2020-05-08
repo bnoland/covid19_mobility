@@ -119,7 +119,7 @@ load_lockdown_data <- function(file) {
 
 # Plots -------------------------------------------------------------------
 
-plot_mobility_changes <- function(state_level_data, lockdown_data) {
+plot_mobility_changes <- function(state_level_data) {
   state_level_data_grouped <- state_level_data %>%
     group_by(region)
   

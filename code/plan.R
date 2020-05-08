@@ -15,5 +15,5 @@ plan <- drake_plan(
 
 # Plots -------------------------------------------------------------------
 
-  mobility_plots = plot_mobility_changes(state_level_data, lockdown_data)
+  mobility_plots = plot_mobility_changes(state_level_data)
 )
