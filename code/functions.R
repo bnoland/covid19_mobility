@@ -117,6 +117,14 @@ load_lockdown_data <- function(file) {
   lockdown_data
 }
 
+make_model_data <- function(state_level_data, rt_data) {
+  model_data <- state_level_data %>%
+    left_join(rt_data, by = c("region", "date")) %>%
+    drop_na()
+  
+  model_data
+}
+
 # Plots -------------------------------------------------------------------
 
 plot_mobility_changes <- function(state_level_data) {
@@ -157,10 +165,27 @@ plot_mobility_changes <- function(state_level_data) {
       
       plot <- plot +
         geom_line() +
-        geom_hline(yintercept = 0, linetype = "dashed")
+        geom_hline(yintercept = 0, linetype = "dashed") +
+        labs(title = region, x = "Date", y = "Percent change")
       
       plot
     })
   
   plots
+}
+
+# Models ------------------------------------------------------------------
+
+make_random_forest_model <- function(model_data) {
+  set.seed(42)
+  
+  rf_model <- randomForest(
+    mean ~ region + retail_and_recreation + grocery_and_pharmacy + parks +
+      transit_stations + workplaces + residential + density + on_lockdown,
+    importance = TRUE,
+    ntree = 500,
+    data = model_data
+  )
+  
+  rf_model
 }

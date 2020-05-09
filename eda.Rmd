@@ -1,7 +1,7 @@
 ---
 title: "Exploratory Data Analysis"
 output: html_notebook
-date: 2020-05-07
+date: 2020-05-08
 ---
 
 ```{r setup, include=FALSE}
@@ -21,7 +21,8 @@ loadd(
   raw_us_data,
   us_data,
   state_level_data,
-  rt_data
+  rt_data,
+  rf_model
 )
 ```
 
@@ -73,7 +74,35 @@ state_level_data %>%
   map(~ sum(is.na(.x)))
 ```
 
+# Examining the R_t data
 
+```{r rt-states}
+rt_data %>%
+  pull(region) %>%
+  unique()
+```
+
+```{r rt-states-count}
+rt_data %>%
+  pull(region) %>%
+  n_distinct()
+```
+
+# Examining the model data
+
+<!-- TODO -->
+
+# Examining the random forest model
+
+```{r rf-model-importance}
+importance(rf_model)
+```
+
+```{r rf-model-importance-plot, fig.width=8}
+varImpPlot(rf_model)
+```
+
+# Session info
 
 ```{r session-info}
 sessionInfo()
