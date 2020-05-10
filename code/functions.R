@@ -90,6 +90,10 @@ load_rt_data <- function(file) {
     )
   )
   
+  rt_data <- rt_data %>%
+    group_by(region) %>%
+    mutate(lagged_mean = lag(mean, 5))
+  
   rt_data
 }
 
@@ -118,11 +122,20 @@ load_lockdown_data <- function(file) {
 }
 
 make_model_data <- function(state_level_data, rt_data) {
-  model_data <- state_level_data %>%
+  plain_model_data <- state_level_data %>%
     left_join(rt_data, by = c("region", "date")) %>%
     drop_na()
   
-  model_data
+  model_data_list <- list()
+  model_data_list[["plain"]] <- plain_model_data
+  model_data_list[["no_dc"]] <- plain_model_data %>%
+    filter(region != "DC")
+  model_data_list[["no_ny"]] <- plain_model_data %>%
+    filter(region != "NY")
+  model_data_list[["low_density"]] <- plain_model_data %>%
+    filter(!(region %in% c("CT", "DC", "MA", "MD", "NJ", "RI")))
+  
+  model_data_list
 }
 
 # Plots -------------------------------------------------------------------
@@ -176,16 +189,26 @@ plot_mobility_changes <- function(state_level_data) {
 
 # Models ------------------------------------------------------------------
 
-make_random_forest_model <- function(model_data) {
+make_random_forest_models <- function(model_data_list) {
   set.seed(42)
   
-  rf_model <- randomForest(
-    mean ~ region + retail_and_recreation + grocery_and_pharmacy + parks +
-      transit_stations + workplaces + residential + density + on_lockdown,
-    importance = TRUE,
-    ntree = 500,
-    data = model_data
-  )
+  rf_model_list <- model_data_list %>%
+    map(function(model_data) {
+      rf_model <- randomForest(
+        # TODO: May want custom formulas as well.
+        # TODO: mean vs. lagged_mean
+        # mean ~ region + retail_and_recreation + grocery_and_pharmacy + parks +
+        #   transit_stations + workplaces + residential + density + on_lockdown,
+        lagged_mean ~ region + retail_and_recreation + grocery_and_pharmacy +
+          parks + transit_stations + workplaces + residential + density +
+          on_lockdown,
+        importance = TRUE,
+        ntree = 500,
+        data = model_data
+      )
+      
+      rf_model
+    })
   
-  rf_model
+  rf_model_list
 }

@@ -20,9 +20,10 @@ knitr::opts_chunk$set(
 loadd(
   raw_us_data,
   us_data,
+  pop_density_data,
   state_level_data,
   rt_data,
-  rf_model
+  rf_model_list
 )
 ```
 
@@ -88,18 +89,59 @@ rt_data %>%
   n_distinct()
 ```
 
+# Density by region
+
+```{r density-by-region, fig.width=8}
+ggplot(pop_density_data, aes(region, density)) +
+  geom_point() +
+  geom_segment(aes(x = region, y = 0, xend = region, yend = density)) +
+  theme(axis.text.x = element_text(angle = 90, size = 8, vjust = 0.5))
+```
+
 # Examining the model data
 
 <!-- TODO -->
 
 # Examining the random forest model
 
-```{r rf-model-importance}
-importance(rf_model)
+## Plain model (run on entire data set)
+
+```{r rf-plain-model-importance}
+importance(rf_model_list[["plain"]])
 ```
 
-```{r rf-model-importance-plot, fig.width=8}
-varImpPlot(rf_model)
+```{r rf-plain-model-importance-plot, fig.width=8}
+varImpPlot(rf_model_list[["plain"]])
+```
+
+## Model excluding DC
+
+```{r rf-no_dc-model-importance}
+importance(rf_model_list[["no_dc"]])
+```
+
+```{r rf-no_dc-model-importance-plot, fig.width=8}
+varImpPlot(rf_model_list[["no_dc"]])
+```
+
+## Model excluding NY
+
+```{r rf-no_ny-model-importance}
+importance(rf_model_list[["no_ny"]])
+```
+
+```{r rf-no_ny-model-importance-plot, fig.width=8}
+varImpPlot(rf_model_list[["no_ny"]])
+```
+
+## Model excluding highest density states (CT, DC, MA, MD, NJ, and RI)
+
+```{r rf-low_density-model-importance}
+importance(rf_model_list[["low_density"]])
+```
+
+```{r rf-low_density-model-importance-plot, fig.width=8}
+varImpPlot(rf_model_list[["low_density"]])
 ```
 
 # Session info
