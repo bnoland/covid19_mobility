@@ -90,10 +90,9 @@ load_rt_data <- function(file) {
     )
   )
   
-  # TODO: Change lags to leads.
   rt_data <- rt_data %>%
     group_by(region) %>%
-    mutate(lagged_mean = lag(mean, 5))
+    mutate(lead_mean = lead(mean, 5))
   
   rt_data
 }
@@ -197,10 +196,7 @@ make_random_forest_models <- function(model_data_list) {
     map(function(model_data) {
       rf_model <- randomForest(
         # TODO: May want custom formulas as well.
-        # TODO: mean vs. lagged_mean
-        # mean ~ region + retail_and_recreation + grocery_and_pharmacy + parks +
-        #   transit_stations + workplaces + residential + density + on_lockdown,
-        lagged_mean ~ region + retail_and_recreation + grocery_and_pharmacy +
+        lead_mean ~ region + retail_and_recreation + grocery_and_pharmacy +
           parks + transit_stations + workplaces + residential + density +
           on_lockdown,
         importance = TRUE,
