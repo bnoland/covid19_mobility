@@ -90,6 +90,7 @@ load_rt_data <- function(file) {
     )
   )
   
+  # TODO: Change lags to leads.
   rt_data <- rt_data %>%
     group_by(region) %>%
     mutate(lagged_mean = lag(mean, 5))
