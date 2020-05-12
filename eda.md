@@ -1,3 +1,10 @@
+# Examining the *unprocessed* Google mobility data for the United States
+
+``` r
+raw_us_data %>%
+  map(~ sum(is.na(.x)))
+```
+
     ## $country_region_code
     ## [1] 0
     ## 
@@ -31,9 +38,19 @@
     ## $residential_percent_change_from_baseline
     ## [1] 111643
 
-# Examining the *unprocessed* Google mobility data for the United States
+``` r
+raw_us_data %>%
+  pull(country_region) %>%
+  unique()
+```
 
     ## [1] "United States"
+
+``` r
+raw_us_data %>%
+  pull(sub_region_1) %>%
+  unique()
+```
 
     ##  [1] NA                     "Alabama"              "Alaska"               "Arizona"             
     ##  [5] "Arkansas"             "California"           "Colorado"             "Connecticut"         
@@ -49,6 +66,11 @@
     ## [45] "Texas"                "Utah"                 "Vermont"              "Virginia"            
     ## [49] "Washington"           "West Virginia"        "Wisconsin"            "Wyoming"
 
+``` r
+raw_us_data %>%
+  count(sub_region_1, sub_region_2)
+```
+
     ## # A tibble: 2,879 x 3
     ##    sub_region_1 sub_region_2        n
     ##    <chr>        <chr>           <int>
@@ -63,6 +85,15 @@
     ##  9 Alabama      Chambers County    76
     ## 10 Alabama      Cherokee County    76
     ## # … with 2,869 more rows
+
+``` r
+raw_us_data %>%
+  group_by(sub_region_1) %>%
+  summarize(
+    min = min(date),
+    max = max(date)
+  )
+```
 
     ## # A tibble: 52 x 3
     ##    sub_region_1         min        max       
@@ -81,11 +112,22 @@
 
 # Examining the *processed* Google mobility data for the United States
 
+``` r
+us_data %>%
+  pull(sub_region_1) %>%
+  unique()
+```
+
     ##  [1] "US" "AL" "AK" "AZ" "AR" "CA" "CO" "CT" "DE" "DC" "FL" "GA" "HI" "ID" "IL" "IN" "IA" "KS" "KY" "LA" "ME" "MD"
     ## [23] "MA" "MI" "MN" "MS" "MO" "MT" "NE" "NV" "NH" "NJ" "NM" "NY" "NC" "ND" "OH" "OK" "OR" "PA" "RI" "SC" "SD" "TN"
     ## [45] "TX" "UT" "VT" "VA" "WA" "WV" "WI" "WY"
 
 # Examining the state-level data
+
+``` r
+state_level_data %>%
+  map(~ sum(is.na(.x)))
+```
 
     ## $region
     ## [1] 0
@@ -125,13 +167,32 @@
 
 # Examining the \(R_t\) data
 
+``` r
+rt_data %>%
+  pull(region) %>%
+  unique()
+```
+
     ##  [1] "AK" "AL" "AR" "AZ" "CA" "CO" "CT" "DC" "DE" "FL" "GA" "HI" "IA" "ID" "IL" "IN" "KS" "KY" "LA" "MA" "MD" "ME"
     ## [23] "MI" "MN" "MO" "MS" "MT" "NC" "ND" "NE" "NH" "NJ" "NM" "NV" "NY" "OH" "OK" "OR" "PA" "RI" "SC" "SD" "TN" "TX"
     ## [45] "UT" "VA" "VT" "WA" "WI" "WV" "WY"
 
+``` r
+rt_data %>%
+  pull(region) %>%
+  n_distinct()
+```
+
     ## [1] 51
 
 # Density by region
+
+``` r
+ggplot(pop_density_data, aes(region, density)) +
+  geom_point() +
+  geom_segment(aes(x = region, y = 0, xend = region, yend = density)) +
+  theme(axis.text.x = element_text(angle = 90, size = 8, vjust = 0.5))
+```
 
 <img src="eda_files/figure-gfm/density-by-region-1.png" width="70%" style="display: block; margin: auto;" />
 
@@ -142,6 +203,13 @@
 # Examining the random forest models
 
 ## Plain model (run on entire data set)
+
+``` r
+model_list <- rf_model_list$plain
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
 
     ##                        %IncMSE IncNodePurity
     ## region                42.11227     2.2124293
@@ -154,9 +222,20 @@
     ## density               57.26428     3.9522925
     ## on_lockdown           33.67663     0.9604685
 
+``` r
+varImpPlot(best_model)
+```
+
 <img src="eda_files/figure-gfm/rf-plain-model-importance-plot-1.png" width="70%" style="display: block; margin: auto;" />
 
 ## Model excluding DC
+
+``` r
+model_list <- rf_model_list$no_dc
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
 
     ##                        %IncMSE IncNodePurity
     ## region                39.95501     1.9976989
@@ -169,9 +248,20 @@
     ## density               58.27673     3.9734098
     ## on_lockdown           28.75160     0.7902863
 
+``` r
+varImpPlot(best_model)
+```
+
 <img src="eda_files/figure-gfm/rf-no_dc-model-importance-plot-1.png" width="70%" style="display: block; margin: auto;" />
 
 ## Model excluding NY
+
+``` r
+model_list <- rf_model_list$no_ny
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
 
     ##                        %IncMSE IncNodePurity
     ## region                40.69612     2.1991896
@@ -184,9 +274,20 @@
     ## density               60.35261     3.9449093
     ## on_lockdown           35.90168     0.9634195
 
+``` r
+varImpPlot(best_model)
+```
+
 <img src="eda_files/figure-gfm/rf-no_ny-model-importance-plot-1.png" width="70%" style="display: block; margin: auto;" />
 
 ## Model excluding highest density states (CT, DC, MA, MD, NJ, and RI)
+
+``` r
+model_list <- rf_model_list$low_density
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
 
     ##                        %IncMSE IncNodePurity
     ## region                42.89877     1.8892529
@@ -199,9 +300,17 @@
     ## density               55.19075     3.6849862
     ## on_lockdown           22.25089     0.5530315
 
+``` r
+varImpPlot(best_model)
+```
+
 <img src="eda_files/figure-gfm/rf-low_density-model-importance-plot-1.png" width="70%" style="display: block; margin: auto;" />
 
 # Session info
+
+``` r
+sessionInfo()
+```
 
     ## R version 4.0.0 (2020-04-24)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
@@ -225,13 +334,13 @@
     ## [11] tidyr_1.0.3         tibble_3.0.1        ggplot2_3.3.0       tidyverse_1.3.0     drake_7.12.0       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] Rcpp_1.0.4.6      txtq_0.2.0        lattice_0.20-41   prettyunits_1.1.1 assertthat_0.2.1  digest_0.6.25    
-    ##  [7] utf8_1.1.4        R6_2.4.1          cellranger_1.1.0  backports_1.1.6   reprex_0.3.0      evaluate_0.14    
+    ##  [1] Rcpp_1.0.4.6      txtq_0.2.0        lattice_0.20-41   prettyunits_1.1.1 utf8_1.1.4        assertthat_0.2.1 
+    ##  [7] digest_0.6.25     R6_2.4.1          cellranger_1.1.0  backports_1.1.6   reprex_0.3.0      evaluate_0.14    
     ## [13] httr_1.4.1        pillar_1.4.4      progress_1.2.2    readxl_1.3.1      rstudioapi_0.11   labeling_0.3     
     ## [19] igraph_1.2.5      munsell_0.5.0     broom_0.5.6       compiler_4.0.0    modelr_0.1.7      xfun_0.13        
-    ## [25] pkgconfig_2.0.3   htmltools_0.4.0   fansi_0.4.1       crayon_1.3.4      dbplyr_1.4.3      withr_2.2.0      
-    ## [31] grid_4.0.0        nlme_3.1-147      jsonlite_1.6.1    gtable_0.3.0      lifecycle_0.2.0   DBI_1.1.0        
-    ## [37] magrittr_1.5      storr_1.2.1       scales_1.1.0      cli_2.0.2         stringi_1.4.6     farver_2.0.3     
-    ## [43] fs_1.4.1          xml2_1.3.2        ellipsis_0.3.0    filelock_1.0.2    generics_0.0.2    vctrs_0.2.4      
-    ## [49] tools_4.0.0       glue_1.4.0        hms_0.5.3         parallel_4.0.0    yaml_2.2.1        colorspace_1.4-1 
-    ## [55] base64url_1.4     rvest_0.3.5       knitr_1.28        haven_2.2.0
+    ## [25] pkgconfig_2.0.3   base64enc_0.1-3   htmltools_0.4.0   fansi_0.4.1       crayon_1.3.4      dbplyr_1.4.3     
+    ## [31] withr_2.2.0       grid_4.0.0        nlme_3.1-147      jsonlite_1.6.1    gtable_0.3.0      lifecycle_0.2.0  
+    ## [37] DBI_1.1.0         magrittr_1.5      storr_1.2.1       scales_1.1.0      cli_2.0.2         stringi_1.4.6    
+    ## [43] farver_2.0.3      fs_1.4.1          xml2_1.3.2        ellipsis_0.3.0    filelock_1.0.2    generics_0.0.2   
+    ## [49] vctrs_0.2.4       tools_4.0.0       glue_1.4.0        hms_0.5.3         parallel_4.0.0    yaml_2.2.1       
+    ## [55] colorspace_1.4-1  base64url_1.4     rvest_0.3.5       knitr_1.28        haven_2.2.0
