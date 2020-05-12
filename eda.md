@@ -182,7 +182,9 @@ state_level_data %>%
     ## $on_lockdown
     ## [1] 0
 
-# Examining the \(R_t\) data
+<!-- TODO: For some reason GitHub markdown doesn't like equation mode. -->
+
+# Examining the R\_t data
 
 State codes included in the data.
 
@@ -227,13 +229,24 @@ ggplot(pop_density_data, aes(region, density)) +
 
 # Examining the random forest models
 
-Just the raw variable importance measures for now.
+Just the raw variable importance measures for now. Random forest models
+were fit to the data after lagging the explanatory variables by 0, 1, …,
+14 days. In each case below we just look at the model with the the
+lowest MSE when fit to the data.
 
 ## Plain model (run on entire data set)
+
+Lag that gave lowest MSE.
 
 ``` r
 model_list <- rf_model_list$plain
 mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+    ## [1] 14
+
+``` r
 best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
@@ -257,9 +270,17 @@ varImpPlot(best_model)
 
 ## Model excluding DC
 
+Lag that gave lowest MSE.
+
 ``` r
 model_list <- rf_model_list$no_dc
 mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+    ## [1] 14
+
+``` r
 best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
@@ -283,9 +304,17 @@ varImpPlot(best_model)
 
 ## Model excluding NY
 
+Lag that gave lowest MSE.
+
 ``` r
 model_list <- rf_model_list$no_ny
 mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+    ## [1] 14
+
+``` r
 best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
@@ -309,9 +338,17 @@ varImpPlot(best_model)
 
 ## Model excluding highest density states (CT, DC, MA, MD, NJ, and RI)
 
+Lag that gave lowest MSE.
+
 ``` r
 model_list <- rf_model_list$low_density
 mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+    ## [1] 14
+
+``` r
 best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
