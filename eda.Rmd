@@ -8,7 +8,7 @@ date: 2020-05-11
 source("code/packages.R")
 
 knitr::opts_chunk$set(
-  echo = FALSE,
+  echo = TRUE,
   fig.width = 6,
   fig.asp = 0.618,
   out.width = "70%",
@@ -27,12 +27,12 @@ loadd(
 )
 ```
 
+# Examining the *unprocessed* Google mobility data for the United States
+
 ```{r raw-us-missing-values}
 raw_us_data %>%
   map(~ sum(is.na(.x)))
 ```
-
-# Examining the *unprocessed* Google mobility data for the United States
 
 ```{r raw-us-unique-country-codes}
 raw_us_data %>%
