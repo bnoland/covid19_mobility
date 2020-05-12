@@ -29,28 +29,35 @@ loadd(
 
 # Examining the *unprocessed* Google mobility data for the United States
 
+Missing value counts for each variable.
 ```{r raw-us-missing-values}
 raw_us_data %>%
   map(~ sum(is.na(.x)))
 ```
 
+Unique country codes in the data. Only the United States, as expected.
 ```{r raw-us-unique-country-codes}
 raw_us_data %>%
   pull(country_region) %>%
   unique()
 ```
 
+All the states represented in the data. Note that "NA" denotes national-level
+data.
 ```{r raw-us-data-states}
 raw_us_data %>%
   pull(sub_region_1) %>%
   unique()
 ```
 
+Counts of each county (and other second-level sub-regions) represented in the
+data.
 ```{r raw-us-data-sub-region-counts}
 raw_us_data %>%
   count(sub_region_1, sub_region_2)
 ```
 
+Date ranges included in the data for each state.
 ```{r raw-us-data-date-ranges}
 raw_us_data %>%
   group_by(sub_region_1) %>%
@@ -62,6 +69,8 @@ raw_us_data %>%
 
 # Examining the *processed* Google mobility data for the United States
 
+State codes included in the data. Note that "US" denotes national-level data and
+"DC" denotes the District of Columbia.
 ```{r us-data-states}
 us_data %>%
   pull(sub_region_1) %>%
@@ -70,6 +79,7 @@ us_data %>%
 
 # Examining the state-level data
 
+Missing value counts for each variable.
 ```{r state-level-missing-values}
 state_level_data %>%
   map(~ sum(is.na(.x)))
@@ -77,12 +87,14 @@ state_level_data %>%
 
 # Examining the $R_t$ data
 
+State codes included in the data.
 ```{r rt-states}
 rt_data %>%
   pull(region) %>%
   unique()
 ```
 
+Total number of regions included in the data. We have all 50 states plus DC.
 ```{r rt-states-count}
 rt_data %>%
   pull(region) %>%
@@ -91,6 +103,8 @@ rt_data %>%
 
 # Density by region
 
+Density by region (all 50 states plus DC). Data from the 2010 United States
+Census.
 ```{r density-by-region, fig.width=8}
 ggplot(pop_density_data, aes(region, density)) +
   geom_point() +
@@ -103,6 +117,8 @@ ggplot(pop_density_data, aes(region, density)) +
 <!-- TODO -->
 
 # Examining the random forest models
+
+Just the raw variable importance measures for now.
 
 ## Plain model (run on entire data set)
 

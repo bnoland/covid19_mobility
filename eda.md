@@ -1,5 +1,7 @@
 # Examining the *unprocessed* Google mobility data for the United States
 
+Missing value counts for each variable.
+
 ``` r
 raw_us_data %>%
   map(~ sum(is.na(.x)))
@@ -38,6 +40,8 @@ raw_us_data %>%
     ## $residential_percent_change_from_baseline
     ## [1] 111643
 
+Unique country codes in the data. Only the United States, as expected.
+
 ``` r
 raw_us_data %>%
   pull(country_region) %>%
@@ -45,6 +49,9 @@ raw_us_data %>%
 ```
 
     ## [1] "United States"
+
+All the states represented in the data. Note that “NA” denotes
+national-level data.
 
 ``` r
 raw_us_data %>%
@@ -66,6 +73,9 @@ raw_us_data %>%
     ## [45] "Texas"                "Utah"                 "Vermont"              "Virginia"            
     ## [49] "Washington"           "West Virginia"        "Wisconsin"            "Wyoming"
 
+Counts of each county (and other second-level sub-regions) represented
+in the data.
+
 ``` r
 raw_us_data %>%
   count(sub_region_1, sub_region_2)
@@ -85,6 +95,8 @@ raw_us_data %>%
     ##  9 Alabama      Chambers County    76
     ## 10 Alabama      Cherokee County    76
     ## # … with 2,869 more rows
+
+Date ranges included in the data for each state.
 
 ``` r
 raw_us_data %>%
@@ -112,6 +124,9 @@ raw_us_data %>%
 
 # Examining the *processed* Google mobility data for the United States
 
+State codes included in the data. Note that “US” denotes national-level
+data and “DC” denotes the District of Columbia.
+
 ``` r
 us_data %>%
   pull(sub_region_1) %>%
@@ -123,6 +138,8 @@ us_data %>%
     ## [45] "TX" "UT" "VT" "VA" "WA" "WV" "WI" "WY"
 
 # Examining the state-level data
+
+Missing value counts for each variable.
 
 ``` r
 state_level_data %>%
@@ -167,6 +184,8 @@ state_level_data %>%
 
 # Examining the \(R_t\) data
 
+State codes included in the data.
+
 ``` r
 rt_data %>%
   pull(region) %>%
@@ -177,6 +196,9 @@ rt_data %>%
     ## [23] "MI" "MN" "MO" "MS" "MT" "NC" "ND" "NE" "NH" "NJ" "NM" "NV" "NY" "OH" "OK" "OR" "PA" "RI" "SC" "SD" "TN" "TX"
     ## [45] "UT" "VA" "VT" "WA" "WI" "WV" "WY"
 
+Total number of regions included in the data. We have all 50 states plus
+DC.
+
 ``` r
 rt_data %>%
   pull(region) %>%
@@ -186,6 +208,9 @@ rt_data %>%
     ## [1] 51
 
 # Density by region
+
+Density by region (all 50 states plus DC). Data from the 2010 United
+States Census.
 
 ``` r
 ggplot(pop_density_data, aes(region, density)) +
@@ -201,6 +226,8 @@ ggplot(pop_density_data, aes(region, density)) +
 <!-- TODO -->
 
 # Examining the random forest models
+
+Just the raw variable importance measures for now.
 
 ## Plain model (run on entire data set)
 
