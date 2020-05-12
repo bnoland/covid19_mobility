@@ -75,7 +75,6 @@ make_state_level_data <- function(us_data, pop_density_data, lockdown_data) {
     left_join(lockdown_data, by = "region") %>%
     # TODO: Ensure this works properly.
     mutate(on_lockdown = (date >= lockdown) & (date < reopen))
-    #select(-lockdown, -reopen)
   
   state_level_data
 }
@@ -89,10 +88,6 @@ load_rt_data <- function(file) {
       .default = col_double()
     )
   )
-  
-  rt_data <- rt_data %>%
-    group_by(region) %>%
-    mutate(lead_mean = lead(mean, 5))
   
   rt_data
 }
@@ -121,7 +116,19 @@ load_lockdown_data <- function(file) {
   lockdown_data
 }
 
-make_model_data <- function(state_level_data, rt_data) {
+# Helper function for adding multiple leads at once to a tibble. Based on:
+# https://purrple.cat/blog/2018/03/02/multiple-lags-with-tidy-evaluation/
+leads <- function(var, lead_vals) {
+  var <- enquo(var)
+  map(lead_vals, ~ quo(lead(!!var, !!.x))) %>%
+    set_names(sprintf("lead_%s_%d", quo_text(var), lead_vals))
+}
+
+make_model_data <- function(state_level_data, rt_data, lead_vals) {
+  rt_data <- rt_data %>%
+    group_by(region) %>%
+    mutate(!!!leads(mean, lead_vals))
+  
   plain_model_data <- state_level_data %>%
     left_join(rt_data, by = c("region", "date")) %>%
     drop_na()
@@ -189,22 +196,36 @@ plot_mobility_changes <- function(state_level_data) {
 
 # Models ------------------------------------------------------------------
 
-make_random_forest_models <- function(model_data_list) {
+make_random_forest_models <- function(model_data_list, lead_vals) {
   set.seed(42)
+  
+  lead_var_names <- str_c("lead_mean_", lead_vals)
   
   rf_model_list <- model_data_list %>%
     map(function(model_data) {
-      rf_model <- randomForest(
-        # TODO: May want custom formulas as well.
-        lead_mean ~ region + retail_and_recreation + grocery_and_pharmacy +
-          parks + transit_stations + workplaces + residential + density +
-          on_lockdown,
-        importance = TRUE,
-        ntree = 500,
-        data = model_data
-      )
       
-      rf_model
+      lead_var_names %>%
+        map(function(lead_var_name) {
+          
+          formula <- as.formula(
+            str_c(lead_var_name,
+            " ~ region + retail_and_recreation + grocery_and_pharmacy +
+              parks + transit_stations + workplaces + residential + density +
+              on_lockdown")
+          )
+          
+          rf_model <- randomForest(
+            formula,
+            importance = TRUE,
+            ntree = 200,
+            data = model_data
+          )
+          
+          preds <- predict(rf_model, model_data)
+          mse <- mean((preds - model_data[[lead_var_name]]) ^ 2)
+          
+          list(model = rf_model, mse = mse)
+        })
     })
   
   rf_model_list

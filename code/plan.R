@@ -1,4 +1,6 @@
 
+lead_vals <- 0:14
+
 plan <- drake_plan(
 
 # Data --------------------------------------------------------------------
@@ -12,7 +14,8 @@ plan <- drake_plan(
   state_level_data = make_state_level_data(us_data, pop_density_data,
                                            lockdown_data),
   rt_data = load_rt_data(file_in("data/rt.csv")),
-  model_data_list = make_model_data(state_level_data, rt_data),
+
+  model_data_list = make_model_data(state_level_data, rt_data, lead_vals),
 
 # Plots -------------------------------------------------------------------
 
@@ -20,5 +23,15 @@ plan <- drake_plan(
 
 # Models ------------------------------------------------------------------
 
-  rf_model_list = make_random_forest_models(model_data_list)
+  rf_model_list = make_random_forest_models(model_data_list, lead_vals),
+
+# Reports -----------------------------------------------------------------
+
+  # For display on GitHub.
+  eda_report = render(
+    knitr_in("eda.Rmd"),
+    output_format = md_document("gfm"),
+    output_file = file_out("eda.md"),
+    quiet = TRUE
+  )
 )

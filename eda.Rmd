@@ -75,7 +75,7 @@ state_level_data %>%
   map(~ sum(is.na(.x)))
 ```
 
-# Examining the R_t data
+# Examining the $R_t$ data
 
 ```{r rt-states}
 rt_data %>%
@@ -102,46 +102,58 @@ ggplot(pop_density_data, aes(region, density)) +
 
 <!-- TODO -->
 
-# Examining the random forest model
+# Examining the random forest models
 
 ## Plain model (run on entire data set)
 
 ```{r rf-plain-model-importance}
-importance(rf_model_list[["plain"]])
+model_list <- rf_model_list$plain
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
 ```
 
 ```{r rf-plain-model-importance-plot, fig.width=8}
-varImpPlot(rf_model_list[["plain"]])
+varImpPlot(best_model)
 ```
 
 ## Model excluding DC
 
 ```{r rf-no_dc-model-importance}
-importance(rf_model_list[["no_dc"]])
+model_list <- rf_model_list$no_dc
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
 ```
 
 ```{r rf-no_dc-model-importance-plot, fig.width=8}
-varImpPlot(rf_model_list[["no_dc"]])
+varImpPlot(best_model)
 ```
 
 ## Model excluding NY
 
 ```{r rf-no_ny-model-importance}
-importance(rf_model_list[["no_ny"]])
+model_list <- rf_model_list$no_ny
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
 ```
 
 ```{r rf-no_ny-model-importance-plot, fig.width=8}
-varImpPlot(rf_model_list[["no_ny"]])
+varImpPlot(best_model)
 ```
 
 ## Model excluding highest density states (CT, DC, MA, MD, NJ, and RI)
 
 ```{r rf-low_density-model-importance}
-importance(rf_model_list[["low_density"]])
+model_list <- rf_model_list$low_density
+mse_scores <- model_list %>% map(~ .x$mse)
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
 ```
 
 ```{r rf-low_density-model-importance-plot, fig.width=8}
-varImpPlot(rf_model_list[["low_density"]])
+varImpPlot(best_model)
 ```
 
 # Session info
@@ -149,4 +161,3 @@ varImpPlot(rf_model_list[["low_density"]])
 ```{r session-info}
 sessionInfo()
 ```
-
