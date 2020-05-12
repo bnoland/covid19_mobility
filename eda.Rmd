@@ -85,7 +85,8 @@ state_level_data %>%
   map(~ sum(is.na(.x)))
 ```
 
-# Examining the $R_t$ data
+<!-- TODO: For some reason GitHub markdown doesn't like equation mode. -->
+# Examining the R_t data
 
 State codes included in the data.
 ```{r rt-states}
