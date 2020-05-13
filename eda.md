@@ -252,15 +252,15 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## region                42.11227     2.2124293
-    ## retail_and_recreation 21.10567     0.9387569
-    ## grocery_and_pharmacy  21.59564     1.1398227
-    ## parks                 27.72831     1.1424794
-    ## transit_stations      39.58341     2.7333732
-    ## workplaces            23.41899     1.6775022
-    ## residential           18.08569     0.5846772
-    ## density               57.26428     3.9522925
-    ## on_lockdown           33.67663     0.9604685
+    ## region                37.84977     2.0863820
+    ## retail_and_recreation 22.10919     0.9905361
+    ## grocery_and_pharmacy  19.31431     1.2032472
+    ## parks                 31.08711     1.1962763
+    ## transit_stations      39.21450     2.7679716
+    ## workplaces            24.99338     1.7234906
+    ## residential           20.27467     0.5985146
+    ## density               57.80772     3.7817772
+    ## on_lockdown           33.59659     0.9347680
 
 ``` r
 varImpPlot(best_model)
@@ -286,15 +286,15 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## region                39.95501     1.9976989
-    ## retail_and_recreation 21.14493     0.9541232
-    ## grocery_and_pharmacy  18.13647     1.2151645
-    ## parks                 27.46888     1.2504006
-    ## transit_stations      35.89401     2.7704141
-    ## workplaces            24.14043     1.6086833
-    ## residential           18.17174     0.5765509
-    ## density               58.27673     3.9734098
-    ## on_lockdown           28.75160     0.7902863
+    ## region                38.04241     2.0957105
+    ## retail_and_recreation 21.85450     1.0206387
+    ## grocery_and_pharmacy  22.01505     1.2970494
+    ## parks                 30.99003     1.2398473
+    ## transit_stations      40.16820     2.8414430
+    ## workplaces            24.82309     1.7326578
+    ## residential           19.04426     0.5758467
+    ## density               52.80813     3.6167606
+    ## on_lockdown           28.73380     0.7727600
 
 ``` r
 varImpPlot(best_model)
@@ -320,15 +320,15 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## region                40.69612     2.1991896
-    ## retail_and_recreation 17.88002     0.8539473
-    ## grocery_and_pharmacy  18.75826     1.1106703
-    ## parks                 28.53285     1.1455716
-    ## transit_stations      37.77372     2.6911677
-    ## workplaces            22.90297     1.3923800
-    ## residential           15.16633     0.5446283
-    ## density               60.35261     3.9449093
-    ## on_lockdown           35.90168     0.9634195
+    ## region                41.79317     2.2308382
+    ## retail_and_recreation 21.45794     0.8667433
+    ## grocery_and_pharmacy  21.14979     1.2327605
+    ## parks                 27.41939     1.1961690
+    ## transit_stations      35.42505     2.5567468
+    ## workplaces            23.39008     1.5946045
+    ## residential           18.27219     0.5774190
+    ## density               53.66439     3.6795922
+    ## on_lockdown           35.02937     0.9147273
 
 ``` r
 varImpPlot(best_model)
@@ -354,15 +354,15 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## region                42.89877     1.8892529
-    ## retail_and_recreation 20.57891     0.8872151
-    ## grocery_and_pharmacy  15.82297     0.9639224
-    ## parks                 28.67785     1.2482636
-    ## transit_stations      40.42258     2.7544549
-    ## workplaces            22.94954     1.5191074
-    ## residential           15.76596     0.5120935
-    ## density               55.19075     3.6849862
-    ## on_lockdown           22.25089     0.5530315
+    ## region                42.95120     1.8780874
+    ## retail_and_recreation 18.94639     0.9359692
+    ## grocery_and_pharmacy  18.99191     1.0389646
+    ## parks                 31.89246     1.3244517
+    ## transit_stations      40.75344     2.6990725
+    ## workplaces            22.45649     1.5273503
+    ## residential           15.43175     0.5545019
+    ## density               52.44500     3.4073170
+    ## on_lockdown           21.86113     0.5476800
 
 ``` r
 varImpPlot(best_model)
@@ -393,18 +393,18 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] tidyselect_1.0.0    rmarkdown_2.1       rlang_0.4.6         randomForest_4.6-14 lubridate_1.7.8    
+    ##  [1] tidyselect_1.1.0    rmarkdown_2.1       rlang_0.4.6         randomForest_4.6-14 lubridate_1.7.8    
     ##  [6] forcats_0.5.0       stringr_1.4.0       dplyr_0.8.5         purrr_0.3.4         readr_1.3.1        
     ## [11] tidyr_1.0.3         tibble_3.0.1        ggplot2_3.3.0       tidyverse_1.3.0     drake_7.12.0       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] Rcpp_1.0.4.6      txtq_0.2.0        lattice_0.20-41   prettyunits_1.1.1 utf8_1.1.4        assertthat_0.2.1 
-    ##  [7] digest_0.6.25     R6_2.4.1          cellranger_1.1.0  backports_1.1.6   reprex_0.3.0      evaluate_0.14    
+    ##  [1] Rcpp_1.0.4.6      txtq_0.2.0        lattice_0.20-41   prettyunits_1.1.1 assertthat_0.2.1  digest_0.6.25    
+    ##  [7] utf8_1.1.4        R6_2.4.1          cellranger_1.1.0  backports_1.1.6   reprex_0.3.0      evaluate_0.14    
     ## [13] httr_1.4.1        pillar_1.4.4      progress_1.2.2    readxl_1.3.1      rstudioapi_0.11   labeling_0.3     
     ## [19] igraph_1.2.5      munsell_0.5.0     broom_0.5.6       compiler_4.0.0    modelr_0.1.7      xfun_0.13        
-    ## [25] pkgconfig_2.0.3   base64enc_0.1-3   htmltools_0.4.0   fansi_0.4.1       crayon_1.3.4      dbplyr_1.4.3     
-    ## [31] withr_2.2.0       grid_4.0.0        nlme_3.1-147      jsonlite_1.6.1    gtable_0.3.0      lifecycle_0.2.0  
-    ## [37] DBI_1.1.0         magrittr_1.5      storr_1.2.1       scales_1.1.0      cli_2.0.2         stringi_1.4.6    
-    ## [43] farver_2.0.3      fs_1.4.1          xml2_1.3.2        ellipsis_0.3.0    filelock_1.0.2    generics_0.0.2   
-    ## [49] vctrs_0.2.4       tools_4.0.0       glue_1.4.0        hms_0.5.3         parallel_4.0.0    yaml_2.2.1       
-    ## [55] colorspace_1.4-1  base64url_1.4     rvest_0.3.5       knitr_1.28        haven_2.2.0
+    ## [25] pkgconfig_2.0.3   htmltools_0.4.0   fansi_0.4.1       crayon_1.3.4      dbplyr_1.4.3      withr_2.2.0      
+    ## [31] grid_4.0.0        nlme_3.1-147      jsonlite_1.6.1    gtable_0.3.0      lifecycle_0.2.0   DBI_1.1.0        
+    ## [37] magrittr_1.5      storr_1.2.1       scales_1.1.1      cli_2.0.2         stringi_1.4.6     farver_2.0.3     
+    ## [43] fs_1.4.1          xml2_1.3.2        ellipsis_0.3.0    filelock_1.0.2    generics_0.0.2    vctrs_0.3.0      
+    ## [49] tools_4.0.0       glue_1.4.0        hms_0.5.3         parallel_4.0.0    yaml_2.2.1        colorspace_1.4-1 
+    ## [55] base64url_1.4     rvest_0.3.5       knitr_1.28        haven_2.2.0
