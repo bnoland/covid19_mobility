@@ -196,7 +196,10 @@ plot_mobility_changes <- function(state_level_data) {
 
 # Models ------------------------------------------------------------------
 
-make_random_forest_models <- function(model_data_list, lead_vals) {
+# TODO: Currently hacky and inflexible. Use formula interface instead?
+make_random_forest_models <- function(model_data_list, lead_vals,
+                                      include_region = TRUE,
+                                      include_on_lockdown = TRUE) {
   set.seed(42)
   
   lead_var_names <- str_c("lead_mean_", lead_vals)
@@ -207,15 +210,20 @@ make_random_forest_models <- function(model_data_list, lead_vals) {
       lead_var_names %>%
         map(function(lead_var_name) {
           
-          formula <- as.formula(
-            str_c(lead_var_name,
-            " ~ region + retail_and_recreation + grocery_and_pharmacy +
-              parks + transit_stations + workplaces + residential + density +
-              on_lockdown")
+          formula_char <- str_c(
+            lead_var_name,
+            " ~ retail_and_recreation + grocery_and_pharmacy + parks +
+              transit_stations + workplaces + residential + density"
           )
           
+          # TODO: Hacky for now.
+          if (include_region)
+            formula_char <- str_c(formula_char, " + region")
+          if (include_on_lockdown)
+            formula_char <- str_c(formula_char, " + on_lockdown")
+          
           rf_model <- randomForest(
-            formula,
+            as.formula(formula_char),
             importance = TRUE,
             ntree = 200,
             data = model_data

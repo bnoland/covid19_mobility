@@ -1,0 +1,101 @@
+---
+title: "Random forest models -- with regions, with lockdown indicator"
+output: html_notebook
+date: 2020-05-13
+---
+
+```{r setup, include=FALSE}
+source("code/packages.R")
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 6,
+  fig.asp = 0.618,
+  out.width = "70%",
+  fig.align = "center",
+  fig.show = "hold",
+  eval = TRUE
+)
+
+loadd(rf_model1_list)
+rf_model_list <- rf_model1_list
+```
+
+# Random forest models -- with regions, with lockdown indicator
+
+Just the raw variable importance measures for now. Random forest models were fit
+to the data after lagging the explanatory variables by 0, 1, ..., 14 days. In
+each case below we just look at the model with the the lowest MSE when fit to
+the data.
+
+## Plain model (run on entire data set)
+
+Lag that gave lowest MSE.
+```{r rf-plain-model-best-lag}
+model_list <- rf_model_list$plain
+mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+```{r rf-plain-model-importance}
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
+
+```{r rf-plain-model-importance-plot, fig.width=8}
+varImpPlot(best_model)
+```
+
+## Model excluding DC
+
+Lag that gave lowest MSE.
+```{r rf-no_dc-model-best-lag}
+model_list <- rf_model_list$no_dc
+mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+```{r rf-no_dc-model-importance}
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
+
+```{r rf-no_dc-model-importance-plot, fig.width=8}
+varImpPlot(best_model)
+```
+
+## Model excluding NY
+
+Lag that gave lowest MSE.
+```{r rf-no_ny-model-best-lag}
+model_list <- rf_model_list$no_ny
+mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+```{r rf-no_ny-model-importance}
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
+
+```{r rf-no_ny-model-importance-plot, fig.width=8}
+varImpPlot(best_model)
+```
+
+## Model excluding highest density states (CT, DC, MA, MD, NJ, and RI)
+
+Lag that gave lowest MSE.
+```{r rf-low_density-model-best-lag}
+model_list <- rf_model_list$low_density
+mse_scores <- model_list %>% map(~ .x$mse)
+which.min(mse_scores) - 1
+```
+
+```{r rf-low_density-model-importance}
+best_model <- model_list[[which.min(mse_scores)]]$model
+importance(best_model)
+```
+
+```{r rf-low_density-model-importance-plot, fig.width=8}
+varImpPlot(best_model)
+```

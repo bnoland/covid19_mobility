@@ -1,0 +1,123 @@
+---
+title: "Exploratory Data Analysis"
+output: html_notebook
+date: 2020-05-13
+---
+
+```{r setup, include=FALSE}
+source("code/packages.R")
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 6,
+  fig.asp = 0.618,
+  out.width = "70%",
+  fig.align = "center",
+  fig.show = "hold",
+  eval = TRUE
+)
+
+loadd(
+  raw_us_data,
+  us_data,
+  pop_density_data,
+  state_level_data,
+  rt_data
+)
+```
+
+# Examining the *unprocessed* Google mobility data for the United States
+
+Missing value counts for each variable.
+```{r raw-us-missing-values}
+raw_us_data %>%
+  map(~ sum(is.na(.x)))
+```
+
+Unique country codes in the data. Only the United States, as expected.
+```{r raw-us-unique-country-codes}
+raw_us_data %>%
+  pull(country_region) %>%
+  unique()
+```
+
+All the states represented in the data. Note that "NA" denotes national-level
+data.
+```{r raw-us-data-states}
+raw_us_data %>%
+  pull(sub_region_1) %>%
+  unique()
+```
+
+Counts of each county (and other second-level sub-regions) represented in the
+data.
+```{r raw-us-data-sub-region-counts}
+raw_us_data %>%
+  count(sub_region_1, sub_region_2)
+```
+
+Date ranges included in the data for each state.
+```{r raw-us-data-date-ranges}
+raw_us_data %>%
+  group_by(sub_region_1) %>%
+  summarize(
+    min = min(date),
+    max = max(date)
+  )
+```
+
+# Examining the *processed* Google mobility data for the United States
+
+State codes included in the data. Note that "US" denotes national-level data and
+"DC" denotes the District of Columbia.
+```{r us-data-states}
+us_data %>%
+  pull(sub_region_1) %>%
+  unique()
+```
+
+# Examining the state-level data
+
+Missing value counts for each variable.
+```{r state-level-missing-values}
+state_level_data %>%
+  map(~ sum(is.na(.x)))
+```
+
+<!-- TODO: For some reason GitHub markdown doesn't like equation mode. -->
+# Examining the R_t data
+
+State codes included in the data.
+```{r rt-states}
+rt_data %>%
+  pull(region) %>%
+  unique()
+```
+
+Total number of regions included in the data. We have all 50 states plus DC.
+```{r rt-states-count}
+rt_data %>%
+  pull(region) %>%
+  n_distinct()
+```
+
+# Density by region
+
+Density by region (all 50 states plus DC). Data from the 2010 United States
+Census.
+```{r density-by-region, fig.width=8}
+ggplot(pop_density_data, aes(region, density)) +
+  geom_point() +
+  geom_segment(aes(x = region, y = 0, xend = region, yend = density)) +
+  theme(axis.text.x = element_text(angle = 90, size = 8, vjust = 0.5))
+```
+
+# Examining the model data
+
+<!-- TODO -->
+
+# Session info
+
+```{r session-info}
+sessionInfo()
+```

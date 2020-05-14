@@ -24,15 +24,54 @@ plan <- drake_plan(
 
 # Models ------------------------------------------------------------------
 
-  rf_model_list = make_random_forest_models(model_data_list, lead_vals),
+  # TODO: Poor naming.
+  rf_model1_list = make_random_forest_models(model_data_list, lead_vals),
+  rf_model2_list = make_random_forest_models(model_data_list, lead_vals,
+                                             include_region = FALSE),
+  rf_model3_list = make_random_forest_models(model_data_list, lead_vals,
+                                             include_on_lockdown = FALSE),
+  rf_model4_list = make_random_forest_models(model_data_list, lead_vals,
+                                             include_region = FALSE,
+                                             include_on_lockdown = FALSE),
 
 # Reports -----------------------------------------------------------------
 
-  # For display on GitHub.
   eda_report = render(
-    knitr_in("eda.Rmd"),
+    knitr_in("eda_report.Rmd"),
     output_format = md_document("gfm"),
-    output_file = file_out("eda.md"),
+    output_file = file_out("eda_report.md"),
+    output_dir = ".",
+    quiet = TRUE
+  ),
+
+  # TODO: Separate reports for the various random forest models just for now.
+
+  rf_model1_report = render(
+    knitr_in("rf_model1_report.Rmd"),
+    output_format = md_document("gfm"),
+    output_file = file_out("rf_model1_report.md"),
+    output_dir = ".",
+    quiet = TRUE
+  ),
+
+  rf_model2_report = render(
+    knitr_in("rf_model2_report.Rmd"),
+    output_format = md_document("gfm"),
+    output_file = file_out("rf_model2_report.md"),
+    quiet = TRUE
+  ),
+
+  rf_model3_report = render(
+    knitr_in("rf_model3_report.Rmd"),
+    output_format = md_document("gfm"),
+    output_file = file_out("rf_model3_report.md"),
+    quiet = TRUE
+  ),
+
+  rf_model4_report = render(
+    knitr_in("rf_model4_report.Rmd"),
+    output_format = md_document("gfm"),
+    output_file = file_out("rf_model4_report.md"),
     quiet = TRUE
   )
 )
