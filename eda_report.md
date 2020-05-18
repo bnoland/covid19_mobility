@@ -14,31 +14,31 @@ raw_us_data %>%
     ## [1] 0
     ## 
     ## $sub_region_1
-    ## [1] 83
+    ## [1] 85
     ## 
     ## $sub_region_2
-    ## [1] 4316
+    ## [1] 4420
     ## 
     ## $date
     ## [1] 0
     ## 
     ## $retail_and_recreation_percent_change_from_baseline
-    ## [1] 54515
+    ## [1] 56527
     ## 
     ## $grocery_and_pharmacy_percent_change_from_baseline
-    ## [1] 61248
+    ## [1] 63637
     ## 
     ## $parks_percent_change_from_baseline
-    ## [1] 165543
+    ## [1] 169151
     ## 
     ## $transit_stations_percent_change_from_baseline
-    ## [1] 136883
+    ## [1] 139807
     ## 
     ## $workplaces_percent_change_from_baseline
-    ## [1] 9850
+    ## [1] 9933
     ## 
     ## $residential_percent_change_from_baseline
-    ## [1] 121834
+    ## [1] 124757
 
 Unique country codes in the data. Only the United States, as expected.
 
@@ -81,20 +81,20 @@ raw_us_data %>%
   count(sub_region_1, sub_region_2)
 ```
 
-    ## # A tibble: 2,879 x 3
+    ## # A tibble: 2,880 x 3
     ##    sub_region_1 sub_region_2        n
     ##    <chr>        <chr>           <int>
-    ##  1 Alabama      Autauga County     83
-    ##  2 Alabama      Baldwin County     83
-    ##  3 Alabama      Barbour County     83
-    ##  4 Alabama      Bibb County        83
-    ##  5 Alabama      Blount County      83
-    ##  6 Alabama      Bullock County     75
-    ##  7 Alabama      Butler County      83
-    ##  8 Alabama      Calhoun County     83
-    ##  9 Alabama      Chambers County    83
-    ## 10 Alabama      Cherokee County    83
-    ## # … with 2,869 more rows
+    ##  1 Alabama      Autauga County     85
+    ##  2 Alabama      Baldwin County     85
+    ##  3 Alabama      Barbour County     85
+    ##  4 Alabama      Bibb County        85
+    ##  5 Alabama      Blount County      85
+    ##  6 Alabama      Bullock County     76
+    ##  7 Alabama      Butler County      85
+    ##  8 Alabama      Calhoun County     85
+    ##  9 Alabama      Chambers County    85
+    ## 10 Alabama      Cherokee County    85
+    ## # … with 2,870 more rows
 
 Date ranges included in the data for each state.
 
@@ -110,16 +110,16 @@ raw_us_data %>%
     ## # A tibble: 52 x 3
     ##    sub_region_1         min        max       
     ##    <chr>                <date>     <date>    
-    ##  1 Alabama              2020-02-15 2020-05-07
-    ##  2 Alaska               2020-02-15 2020-05-07
-    ##  3 Arizona              2020-02-15 2020-05-07
-    ##  4 Arkansas             2020-02-15 2020-05-07
-    ##  5 California           2020-02-15 2020-05-07
-    ##  6 Colorado             2020-02-15 2020-05-07
-    ##  7 Connecticut          2020-02-15 2020-05-07
-    ##  8 Delaware             2020-02-15 2020-05-07
-    ##  9 District of Columbia 2020-02-15 2020-05-07
-    ## 10 Florida              2020-02-15 2020-05-07
+    ##  1 Alabama              2020-02-15 2020-05-09
+    ##  2 Alaska               2020-02-15 2020-05-09
+    ##  3 Arizona              2020-02-15 2020-05-09
+    ##  4 Arkansas             2020-02-15 2020-05-09
+    ##  5 California           2020-02-15 2020-05-09
+    ##  6 Colorado             2020-02-15 2020-05-09
+    ##  7 Connecticut          2020-02-15 2020-05-09
+    ##  8 Delaware             2020-02-15 2020-05-09
+    ##  9 District of Columbia 2020-02-15 2020-05-09
+    ## 10 Florida              2020-02-15 2020-05-09
     ## # … with 42 more rows
 
 # Examining the *processed* Google mobility data for the United States
@@ -159,7 +159,7 @@ state_level_data %>%
     ## [1] 0
     ## 
     ## $parks
-    ## [1] 2
+    ## [1] 4
     ## 
     ## $transit_stations
     ## [1] 0

@@ -22,16 +22,16 @@ best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
 
-    ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 22.11653     1.0801529
-    ## grocery_and_pharmacy  18.94269     0.8756668
-    ## parks                 24.90086     1.1488436
-    ## transit_stations      27.84742     2.0195211
-    ## workplaces            24.69761     1.1132648
-    ## residential           14.75144     0.5178978
-    ## density               63.30014     5.0842157
-    ## region                36.96368     2.7875978
-    ## on_lockdown           21.38329     0.3494278
+    ##                         %IncMSE IncNodePurity
+    ## retail_and_recreation 22.473510    0.91304897
+    ## grocery_and_pharmacy  15.830614    0.69750187
+    ## parks                 22.011135    0.79299837
+    ## transit_stations      27.132600    1.61645411
+    ## workplaces            18.795577    0.65840583
+    ## residential           13.021818    0.35038309
+    ## density               60.672573    4.66139731
+    ## region                37.427373    3.07144446
+    ## on_lockdown            6.752515    0.09106055
 
 ``` r
 varImpPlot(best_model)
@@ -56,16 +56,16 @@ best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
 
-    ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 19.46546     1.1748559
-    ## grocery_and_pharmacy  17.29981     0.9568561
-    ## parks                 27.79390     1.2758562
-    ## transit_stations      31.25781     2.0537838
-    ## workplaces            23.32435     1.1012566
-    ## residential           13.60370     0.4983689
-    ## density               58.28550     4.8198043
-    ## region                34.64513     2.6555651
-    ## on_lockdown           22.83604     0.2997592
+    ##                         %IncMSE IncNodePurity
+    ## retail_and_recreation 21.675170    0.94272691
+    ## grocery_and_pharmacy  15.636707    0.71612590
+    ## parks                 22.509856    0.95891981
+    ## transit_stations      27.082854    1.75507533
+    ## workplaces            19.981051    0.62099429
+    ## residential           13.652652    0.37735956
+    ## density               58.391489    4.46212804
+    ## region                37.716575    2.78878684
+    ## on_lockdown            6.277285    0.09489861
 
 ``` r
 varImpPlot(best_model)
@@ -90,16 +90,16 @@ best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
 
-    ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 19.64939     0.9289759
-    ## grocery_and_pharmacy  20.09786     0.9044383
-    ## parks                 25.01380     1.1829653
-    ## transit_stations      30.23134     1.9036896
-    ## workplaces            21.34488     1.0077035
-    ## residential           15.12524     0.5173501
-    ## density               62.75983     4.9654613
-    ## region                34.95724     2.7739503
-    ## on_lockdown           23.21899     0.3448406
+    ##                         %IncMSE IncNodePurity
+    ## retail_and_recreation 21.185674    0.85672117
+    ## grocery_and_pharmacy  15.748409    0.68246255
+    ## parks                 19.757683    0.77867704
+    ## transit_stations      24.984142    1.45222955
+    ## workplaces            19.461940    0.63134023
+    ## residential           12.403228    0.37186264
+    ## density               65.524751    4.74183956
+    ## region                42.349352    2.97103649
+    ## on_lockdown            5.213248    0.08915529
 
 ``` r
 varImpPlot(best_model)
@@ -124,16 +124,16 @@ best_model <- model_list[[which.min(mse_scores)]]$model
 importance(best_model)
 ```
 
-    ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 22.13780     1.1628813
-    ## grocery_and_pharmacy  16.63807     0.8390426
-    ## parks                 29.90682     1.1073105
-    ## transit_stations      29.88693     2.1693149
-    ## workplaces            23.63036     1.1468740
-    ## residential           14.07404     0.5212620
-    ## density               53.52231     4.3199662
-    ## region                30.82444     2.5179267
-    ## on_lockdown           19.74175     0.2585568
+    ##                         %IncMSE IncNodePurity
+    ## retail_and_recreation 20.127138    0.74967410
+    ## grocery_and_pharmacy  16.223113    0.64554951
+    ## parks                 22.490715    0.83708963
+    ## transit_stations      29.404910    1.90086009
+    ## workplaces            21.520031    0.64096459
+    ## residential           14.044283    0.31636825
+    ## density               69.862913    4.08633890
+    ## region                33.121987    2.66348361
+    ## on_lockdown            6.664574    0.09635609
 
 ``` r
 varImpPlot(best_model)

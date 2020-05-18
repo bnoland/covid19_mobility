@@ -23,14 +23,14 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 24.05495     1.1960263
-    ## grocery_and_pharmacy  19.32111     1.0107696
-    ## parks                 27.05207     1.3552283
-    ## transit_stations      29.44385     2.0222596
-    ## workplaces            26.81672     1.2423963
-    ## residential           15.83620     0.6484277
-    ## density               52.92175     4.7420255
-    ## region                39.49566     2.5957975
+    ## retail_and_recreation 22.06743     1.0786089
+    ## grocery_and_pharmacy  17.01326     0.7998339
+    ## parks                 24.74389     0.9150519
+    ## transit_stations      26.74671     1.6886538
+    ## workplaces            22.28359     0.7870410
+    ## residential           17.19939     0.4867852
+    ## density               55.10116     4.1478345
+    ## region                39.93703     2.7989136
 
 ``` r
 varImpPlot(best_model)
@@ -56,14 +56,14 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 22.99036     1.2377778
-    ## grocery_and_pharmacy  19.08320     1.0563074
-    ## parks                 28.84662     1.4289774
-    ## transit_stations      30.42884     2.0846201
-    ## workplaces            24.35258     1.1913083
-    ## residential           15.68579     0.6357324
-    ## density               51.79008     4.4108985
-    ## region                32.94905     2.6319884
+    ## retail_and_recreation 22.48792     0.9922854
+    ## grocery_and_pharmacy  17.98363     0.8907215
+    ## parks                 24.37323     1.0230342
+    ## transit_stations      29.85890     1.8251661
+    ## workplaces            21.01068     0.7352790
+    ## residential           15.88802     0.5105904
+    ## density               55.97636     4.1279312
+    ## region                35.34716     2.5251981
 
 ``` r
 varImpPlot(best_model)
@@ -89,14 +89,14 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 21.72692     1.1314321
-    ## grocery_and_pharmacy  20.61496     0.9964867
-    ## parks                 27.01827     1.3390642
-    ## transit_stations      30.60631     1.9138691
-    ## workplaces            23.07506     1.1600486
-    ## residential           12.69616     0.6432676
-    ## density               49.20584     4.5610318
-    ## region                34.31066     2.6531162
+    ## retail_and_recreation 22.22135     0.9323734
+    ## grocery_and_pharmacy  19.26600     0.8057142
+    ## parks                 22.68864     0.9659374
+    ## transit_stations      25.38950     1.4213523
+    ## workplaces            22.88107     0.7719500
+    ## residential           14.50776     0.5105544
+    ## density               52.20203     4.0425360
+    ## region                35.84969     2.9136677
 
 ``` r
 varImpPlot(best_model)
@@ -122,14 +122,14 @@ importance(best_model)
 ```
 
     ##                        %IncMSE IncNodePurity
-    ## retail_and_recreation 20.73617     1.1486194
-    ## grocery_and_pharmacy  17.65107     0.9804049
-    ## parks                 28.54990     1.2661506
-    ## transit_stations      27.84826     2.0552798
-    ## workplaces            24.51553     1.2692311
-    ## residential           15.63027     0.6410963
-    ## density               55.25704     4.0772130
-    ## region                31.84740     2.4660601
+    ## retail_and_recreation 20.81552     0.8431665
+    ## grocery_and_pharmacy  18.72364     0.8335774
+    ## parks                 22.71370     0.9538419
+    ## transit_stations      28.42708     1.7624333
+    ## workplaces            21.81797     0.7668006
+    ## residential           14.07967     0.4414532
+    ## density               52.41827     3.7633075
+    ## region                34.30597     2.5066371
 
 ``` r
 varImpPlot(best_model)
