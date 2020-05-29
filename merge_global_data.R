@@ -15,7 +15,10 @@ rt_data <- rt_data %>%
   rename(
     region = `Country/Region`,
     date = Date
-  )
+  ) %>%
+  mutate(region = replace(region, region == "US", "United States")) %>%
+  filter(days_infectious == 7) %>%
+  select(-days_infectious, -last_updated)
 
 rt_data
 
@@ -33,12 +36,12 @@ mobility_data <- read_csv(
 
 mobility_data <- mobility_data %>%
   filter(is.na(sub_region_1) & is.na(sub_region_2)) %>%
-  select(-sub_region_1, -sub_region_2)
+  select(-sub_region_1, -sub_region_2, -country_region_code)
 
 mobility_data <- mobility_data %>%
   rename(
     region = country_region,
-    region_code = country_region_code,
+    #region_code = country_region_code,
     retail_and_recreation
     = retail_and_recreation_percent_change_from_baseline,
     grocery_and_pharmacy = grocery_and_pharmacy_percent_change_from_baseline,
@@ -50,10 +53,14 @@ mobility_data <- mobility_data %>%
 
 mobility_data
 
+# TODO: Should specify countries of interest beforehand.
+
 sort(unique(mobility_data$region))
 sort(unique(rt_data$region))
 
 merged_data <- left_join(mobility_data, rt_data, by = c("region", "date"))
 merged_data
+
+sort(unique(merged_data$region))
 
 write_csv(merged_data, file.path(data_dir, "merged_global_data.csv"))
