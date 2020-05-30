@@ -1,0 +1,116 @@
+---
+title: "Global data modeling"
+output: html_notebook
+date: 2020-05-29
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 6,
+  fig.asp = 0.618,
+  out.width = "70%",
+  fig.align = "center",
+  fig.show = "hold",
+  eval = TRUE
+)
+```
+
+```{r load-data}
+data_dir <- "global_data"
+global_data <- read_csv(
+  file = file.path(data_dir, "merged_global_data.csv"),
+  col_types = cols(
+    region = col_character(),
+    date = col_date(format = "%Y-%m-%d"),
+    .default = col_double()
+  )
+)
+
+global_data <- global_data %>%
+  group_by(region) %>%
+  mutate(
+    days_since_start = (min(date) %--% date) / days(1),
+    R_lead7 = lead(R, 7)
+  )
+
+sort(unique(global_data$region))
+```
+
+```{r filter-data-countries}
+countries <- c("Ireland", "Netherlands", "Norway",# "United Kingdom",
+               "Spain", "Denmark", "Germany", "Belgium", "Finland", "Italy",
+               "Poland", "Sweden", "Austria", "France", "Greece", "Luxembourg",
+               "Portugal", "Switzerland")
+
+countries <- c(countries, c("Japan", "United States"))
+
+#countries <- c("Italy", "Spain", "Ireland", "Germany", "France", "United Kingdom", "United States")
+
+global_data <- global_data %>%
+  filter(region %in% countries)
+
+sort(unique(global_data$region))
+```
+
+```{r fit-full-model}
+global_model_full <- lm(
+  R_lead7 ~ region + days_since_start + retail_and_recreation +
+    grocery_and_pharmacy + parks + transit_stations + workplaces + residential,
+  data = global_data
+)
+
+car::vif(global_model_full)
+summary(global_model_full)
+```
+
+```{r full-model-plots}
+old_par = par(mfrow=c(2, 2))
+plot(global_model_full)
+par(old_par)
+```
+
+```{r, fig.width=8}
+model <- lm(log(R_lead7) ~ region + days_since_start + workplaces, data = global_data)
+#summary(model)
+old_par = par(mfrow=c(2, 2))
+plot(model)
+par(old_par)
+#MASS::boxcox(model)
+plot(fitted(model), rstudent(model))
+```
+
+
+```{r fit-simpler-models}
+explanatory_vars <- c("retail_and_recreation", "grocery_and_pharmacy", "parks",
+                      "transit_stations", "workplaces", "residential")
+
+model_list <- list()
+for (ev in explanatory_vars) {
+  f <- str_c("log(R_lead7) ~ region + days_since_start +", ev)
+  model <- lm(f, data = global_data)
+  model_list[[ev]] <- model
+}
+```
+
+```{r simpler-model-plots, fig.width=9}
+for (ev in names(model_list)) {
+  model <- model_list[[ev]]
+  old_par = par(mfrow=c(2, 3))
+  plot(model)
+  plot(fitted(model), rstudent(model))
+  par(old_par)
+}
+```
+
+```{r}
+summary(model_list[[1]])
+```
+
+
+```{r}
+global_data[c(1311), "region"]
+```

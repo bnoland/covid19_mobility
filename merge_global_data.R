@@ -55,10 +55,10 @@ mobility_data
 
 # TODO: Should specify countries of interest beforehand.
 
-sort(unique(mobility_data$region))
-sort(unique(rt_data$region))
+merged_data <- mobility_data %>%
+  left_join(rt_data, by = c("region", "date")) %>%
+  drop_na()
 
-merged_data <- left_join(mobility_data, rt_data, by = c("region", "date"))
 merged_data
 
 sort(unique(merged_data$region))
